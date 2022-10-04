@@ -141,11 +141,9 @@ for n in table_graph_lines.index.get_level_values('region_eng').unique():
     
 color_map = ['#93c2d3', '#faaa6d', '#fdd0a9', '#F7C815', '#f78562', '#30637f']
 
-# A grid of 20 area charts
-rows, cols = 5, 4
-fig, axes = plt.subplots(rows, cols, sharex=True, sharey=True, squeeze=False, figsize=(20,16), facecolor='w')
+fig, axes = plt.subplots(sharex=True, sharey=True, squeeze=False, figsize=(20,16), facecolor='w')
 
-# Making the charts
+# Making a grid of 20 area charts
 i = 0
 for n in range(4):
     for m in range(5):

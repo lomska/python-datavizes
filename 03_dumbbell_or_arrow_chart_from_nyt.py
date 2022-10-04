@@ -22,7 +22,7 @@ warnings.filterwarnings('ignore', category=UserWarning, module='openpyxl')
 df = pd.read_csv('russian_budget_data.csv', index_col=0)
 
 # To draw the chart, we need three columns: the volume for 2011, the volume for 2011, and the absolute difference between them
-# to sort the dumbbells.
+# to color the dumbbells.
 # I don't take the regions with negative money flows here.
 
 regs_for_graph = df.query('i1 == 1 & r1 in (1, 3) & r3 == 0')[['year', 'index', 'region_eng', 'value']].query(
