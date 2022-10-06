@@ -72,26 +72,29 @@ regional_spendings_pc = regional_spendings_pc[['year', 'region_eng', 'healthcare
 def adjust_box_widths(g, fac):
 
     for ax in g.axes:
+        
+        box_num = 1
 
         for c in ax.get_children():
 
             if isinstance(c, PathPatch):
                 p = c.get_path()
-                verts = p.vertices
+                verts = p.vertices # find the edges of the box
                 verts_sub = verts[:-1]
-                xmin = np.min(verts_sub[:, 0])
-                xmax = np.max(verts_sub[:, 0])
-                xmid = 0.5*(xmin+xmax)
-                xhalf = 0.5*(xmax - xmin)
+                xmin = np.min(verts_sub[:, 0]) # only the x-axis values
+                xmax = np.max(verts_sub[:, 0]) # only the x-axis values
+                xmid = 0.5*(xmin+xmax) # the center of the box on the x-axis
+                xhalf = 0.5*(xmax - xmin) # the half (0.5) of current box width
 
-                xmin_new = xmid-fac*xhalf
-                xmax_new = xmid+fac*xhalf
-                verts_sub[verts_sub[:, 0] == xmin, 0] = xmin_new
-                verts_sub[verts_sub[:, 0] == xmax, 0] = xmax_new
+                xmin_new = xmid-fac*xhalf # new min = median - 0.8 * 0.5 old box width
+                xmax_new = xmid+fac*xhalf # new max = median + 0.8 * 0.5 old box width
+                verts_sub[verts_sub[:, 0] == xmin, 0] = xmin_new # assigning new min
+                verts_sub[verts_sub[:, 0] == xmax, 0] = xmax_new # assigning new max
 
-                for l in ax.lines:
-                    if np.all(l.get_xdata() == [xmin, xmax]):
-                        l.set_xdata([xmin_new+0.01, xmax_new-0.01])
+                for l in ax.lines[box_num*6-6 : box_num*6]:
+                    if np.all(l.get_xdata()[:2] == [xmin, xmax]):
+                        l.set_xdata([xmin_new+0.01, xmax_new-0.01]) # adjusting the median line of the box
+                box_num += 1
 
 # And this one sets color parameters for the boxes and their whiskers; we'll set one color for all the components except the 
 # median line
